@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,12 +19,14 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El titulo es obligatorio")
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
     @Column(name = "descripcion")
     private String descripcion;
 
+    @NotBlank(message = "El estado es obligatorio")
     @Column(name = "estado", nullable = false)
     private String estado;
 

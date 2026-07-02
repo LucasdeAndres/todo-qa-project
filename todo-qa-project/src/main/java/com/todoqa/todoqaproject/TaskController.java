@@ -1,5 +1,6 @@
 package com.todoqa.todoqaproject;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,13 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
         Task createdTask = taskService.createTask(task);
         return ResponseEntity.ok(createdTask);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id,@Valid @RequestBody Task taskDetails) {
         Task updatedTask = taskService.updateTask(id, taskDetails);
         if (updatedTask == null) {
             return ResponseEntity.notFound().build();
