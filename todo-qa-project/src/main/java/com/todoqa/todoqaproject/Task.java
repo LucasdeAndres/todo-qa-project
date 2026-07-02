@@ -26,7 +26,7 @@ public class Task {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Size(max = 700, message = "La descripcion no puede superar los 500 caracteres")
+    @Size(max = 700, message = "La descripcion no puede superar los 700 caracteres")
     @Column(name = "descripcion")
     private String descripcion;
 
