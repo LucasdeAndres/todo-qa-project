@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -20,13 +22,16 @@ public class Task {
     private Long id;
 
     @NotBlank(message = "El titulo es obligatorio")
+    @Size(max = 100, message = "El titulo no puede superar los 100 caracteres")
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @Size(max = 700, message = "La descripcion no puede superar los 500 caracteres")
     @Column(name = "descripcion")
     private String descripcion;
 
     @NotBlank(message = "El estado es obligatorio")
+    @Pattern(regexp = "TODO|IN_PROGRESS|DONE", message = "El estado debe ser TODO, IN_PROGRESS o DONE")
     @Column(name = "estado", nullable = false)
     private String estado;
 
