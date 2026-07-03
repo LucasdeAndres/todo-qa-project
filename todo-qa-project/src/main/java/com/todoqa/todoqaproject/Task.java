@@ -35,6 +35,12 @@ public class Task {
     @Column(name = "estado", nullable = false)
     private String estado;
 
+    @NotBlank(message = "La prioridad es obligatoria")
+    @Pattern(regexp = "BAJA|MEDIA|ALTA", message = "La prioridad debe ser BAJA, MEDIA o ALTA")
+    @Column(name = "prioridad", nullable = false)
+    private String prioridad = "MEDIA";
+
+
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
@@ -76,6 +82,14 @@ public class Task {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
     }
 
     public LocalDateTime getFechaCreacion() {
