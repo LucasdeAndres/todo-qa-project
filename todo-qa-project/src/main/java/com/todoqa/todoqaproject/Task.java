@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,6 +41,8 @@ public class Task {
     @Column(name = "prioridad", nullable = false)
     private String prioridad = "MEDIA";
 
+    @Column(name = "fecha_limite")
+    private LocalDate fechaLimite;
 
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
@@ -99,4 +102,13 @@ public class Task {
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+
+    public LocalDate getFechaLimite() {
+        return fechaLimite;
+    }
+
+    public void setFechaLimite(LocalDate fechaLimite) {
+        this.fechaLimite = fechaLimite;
+    }
+
 }

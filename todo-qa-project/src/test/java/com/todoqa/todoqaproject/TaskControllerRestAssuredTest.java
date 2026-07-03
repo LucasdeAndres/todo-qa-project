@@ -258,4 +258,145 @@ class TaskControllerRestAssuredTest {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    void createTask_sinPrioridad_deberiaUsarMediaPorDefecto() {
+        String body = """
+        {
+            "titulo": "Tarea sin prioridad especificada",
+            "descripcion": "Deberia usar MEDIA por defecto",
+            "estado": "TODO"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .body("prioridad", equalTo("MEDIA"));
+    }
+
+    @Test
+    void createTask_prioridadValida_deberiaDevolverla() {
+        String body = """
+        {
+            "titulo": "Tarea urgente",
+            "descripcion": "Con prioridad ALTA explicita",
+            "estado": "TODO",
+            "prioridad": "ALTA"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .body("prioridad", equalTo("ALTA"));
+    }
+
+    @Test
+    void createTask_prioridadInvalida_deberiaDevolver400() {
+        String body = """
+        {
+            "titulo": "Tarea con prioridad invalida",
+            "descripcion": "URGENTE no es un valor permitido",
+            "estado": "TODO",
+            "prioridad": "URGENTE"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void createTask_sinFechaLimite_deberiaQuedarNull() {
+        String body = """
+        {
+            "titulo": "Tarea sin fecha limite",
+            "descripcion": "No todas las tareas tienen vencimiento",
+            "estado": "TODO"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .body("fechaLimite", nullValue());
+    }
+
+    @Test
+    void createTask_conFechaLimite_deberiaDevolverla() {
+        String body = """
+        {
+            "titulo": "Tarea con vencimiento",
+            "descripcion": "Con fecha limite explicita",
+            "estado": "TODO",
+            "fechaLimite": "2026-12-31"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .body("fechaLimite", equalTo("2026-12-31"));
+    }
+
+    @Test
+    void createTask_fechaLimiteMalFormateada_deberiaDevolver400() {
+        String body = """
+        {
+            "titulo": "Tarea con fecha invalida",
+            "descripcion": "Formato de fecha incorrecto",
+            "estado": "TODO",
+            "fechaLimite": "31/12/2026"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    void createTask_contentTypeInvalido_deberiaDevolver415() {
+        String body = """
+        {
+            "titulo": "Tarea con content-type incorrecto",
+            "descripcion": "No deberia procesarse como texto plano",
+            "estado": "TODO"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.TEXT)
+                .body(body)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(415);
+    }
 }
