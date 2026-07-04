@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do QA - Lista de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Tareas</h1>
+
+    <table class="table table-striped" id="task-table">
+        <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Fecha Límite</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}" th:id="'task-row-' + ${task.id}">
+            <td th:text="${task.titulo}" class="task-titulo"></td>
+            <td th:text="${task.descripcion}" class="task-descripcion"></td>
+            <td th:text="${task.estado}" class="task-estado"></td>
+            <td th:text="${task.prioridad}" class="task-prioridad"></td>
+            <td th:text="${task.fechaLimite}" class="task-fecha-limite"></td>
+            <td>
+                <a th:href="@{'/ui/tasks/' + ${task.id} + '/edit'}"
+                   class="btn btn-sm btn-primary task-edit-btn">Editar</a>
+                <button type="button"
+                        class="btn btn-sm btn-danger task-delete-btn"
+                        th:attr="data-task-id=${task.id}">Borrar</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/ui/tasks/new" class="btn btn-success" id="new-task-btn">Nueva Tarea</a>
+</div>
+</body>
+</html>
