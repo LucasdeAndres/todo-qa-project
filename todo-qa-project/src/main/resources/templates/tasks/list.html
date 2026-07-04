@@ -30,9 +30,10 @@
             <td>
                 <a th:href="@{'/ui/tasks/' + ${task.id} + '/edit'}"
                    class="btn btn-sm btn-primary task-edit-btn">Editar</a>
-                <button type="button"
-                        class="btn btn-sm btn-danger task-delete-btn"
-                        th:attr="data-task-id=${task.id}">Borrar</button>
+                <form th:action="@{'/ui/tasks/' + ${task.id} + '/delete'}" method="post"
+                      class="d-inline task-delete-form" th:attr="data-task-id=${task.id}">
+                    <button type="submit" class="btn btn-sm btn-danger task-delete-btn">Borrar</button>
+                </form>
             </td>
         </tr>
         </tbody>
