@@ -9,7 +9,8 @@
 <div class="container mt-5">
   <h1 class="mb-4">Nueva Tarea</h1>
 
-  <form th:action="@{/ui/tasks}" th:object="${task}" method="post" id="task-form">
+  <form th:action="${task.id} != null ? @{'/ui/tasks/' + ${task.id}} : @{/ui/tasks}"
+        th:object="${task}" method="post" id="task-form">
 
     <div class="mb-3">
       <label for="titulo" class="form-label">Título</label>

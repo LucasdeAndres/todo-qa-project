@@ -399,4 +399,136 @@ class TaskControllerRestAssuredTest {
                 .then()
                 .statusCode(415);
     }
+
+    @Test
+    void updateTask_prioridad_deberiaPersistirCambio() {
+        String createBody = """
+        {
+            "titulo": "Tarea con prioridad original",
+            "descripcion": "Antes de editar",
+            "estado": "TODO",
+            "prioridad": "BAJA"
+        }
+        """;
+
+        int id = given()
+                .contentType(ContentType.JSON)
+                .body(createBody)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        String updateBody = """
+        {
+            "titulo": "Tarea con prioridad original",
+            "descripcion": "Antes de editar",
+            "estado": "TODO",
+            "prioridad": "ALTA"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updateBody)
+                .when()
+                .put("/tasks/" + id)
+                .then()
+                .statusCode(200)
+                .body("prioridad", equalTo("ALTA"));
+
+        given()
+                .when()
+                .get("/tasks/" + id)
+                .then()
+                .statusCode(200)
+                .body("prioridad", equalTo("ALTA"));
+    }
+
+    @Test
+    void updateTask_fechaLimite_deberiaPersistirCambio() {
+        String createBody = """
+        {
+            "titulo": "Tarea sin fecha limite",
+            "descripcion": "Antes de editar",
+            "estado": "TODO"
+        }
+        """;
+
+        int id = given()
+                .contentType(ContentType.JSON)
+                .body(createBody)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .body("fechaLimite", nullValue())
+                .extract()
+                .path("id");
+
+        String updateBody = """
+        {
+            "titulo": "Tarea sin fecha limite",
+            "descripcion": "Antes de editar",
+            "estado": "TODO",
+            "fechaLimite": "2026-12-31"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updateBody)
+                .when()
+                .put("/tasks/" + id)
+                .then()
+                .statusCode(200)
+                .body("fechaLimite", equalTo("2026-12-31"));
+
+        given()
+                .when()
+                .get("/tasks/" + id)
+                .then()
+                .statusCode(200)
+                .body("fechaLimite", equalTo("2026-12-31"));
+    }
+
+    @Test
+    void updateTask_fechaLimiteMalFormateada_deberiaDevolver400() {
+        String createBody = """
+        {
+            "titulo": "Tarea para test de fecha invalida",
+            "descripcion": "Antes de editar",
+            "estado": "TODO"
+        }
+        """;
+
+        int id = given()
+                .contentType(ContentType.JSON)
+                .body(createBody)
+                .when()
+                .post("/tasks")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
+
+        String updateBody = """
+        {
+            "titulo": "Tarea para test de fecha invalida",
+            "descripcion": "Antes de editar",
+            "estado": "TODO",
+            "fechaLimite": "31/12/2026"
+        }
+        """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updateBody)
+                .when()
+                .put("/tasks/" + id)
+                .then()
+                .statusCode(400);
+    }
 }
