@@ -29,8 +29,13 @@ public class TaskListSeleniumTest extends org.springframework.test.context.testn
         WebDriverManager.chromedriver().setup();
 
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--window-size=1920,1080");
+
         driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
         taskListPage = new TaskListPage(driver);
     }
 
