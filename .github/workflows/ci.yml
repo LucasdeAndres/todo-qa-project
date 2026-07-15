@@ -36,6 +36,9 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build and run tests
+      - name: Verify Chrome is available
+        run: google-chrome --version
+
+      - name: Build and run all tests
         working-directory: ./todo-qa-project
-        run: mvn clean test
+        run: mvn clean verify
